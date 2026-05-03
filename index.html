@@ -1495,6 +1495,9 @@
 
       <div class="grid md:grid-cols-2 gap-8">
 
+        <!-- Terminal Form -->
+        <!-- NOTE: First submission will trigger a verification email from Formsubmit.co
+             to deekshantdahal@gmail.com — confirm it once to activate. -->
         <div class="terminal-window reveal">
           <div class="terminal-titlebar">
             <span class="ml-3 text-xs text-gray-600 font-mono">transmission.sh</span>
@@ -1547,6 +1550,7 @@
           </div>
         </div>
 
+        <!-- Social Links Terminal -->
         <div class="terminal-window reveal">
           <div class="terminal-titlebar">
             <span class="ml-3 text-xs text-gray-600 font-mono">connections.sh</span>
@@ -1620,7 +1624,7 @@
     // CONTACT FORM — AJAX (no redirect)
     // ══════════════════════════════════════════
     (function() {
-      const FORM_URL = 'https://formsubmit.co/ajax/d0d560f115b89394a1279fc7f02184f4';
+      const FORM_URL = 'https://formsubmit.co/ajax/deekshantdahal@gmail.com';
       const form     = document.getElementById('contact-form');
       const status   = document.getElementById('form-status');
       const btn      = document.getElementById('form-submit-btn');
@@ -1797,48 +1801,80 @@
     setInterval(drawMatrix, 60);
 
     // ══════════════════════════════════════════
-    // SECRET CONSOLE (press `)
+    // SECRET CONSOLE (press `) — AI powered
     // ══════════════════════════════════════════
+    const GEMINI_KEY  = 'AIzaSyDX8kbb8mHHr9Lkpgplzwgfb9LDSIzjIzo';
+    const GEMINI_URL  = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
+
+    const SYSTEM_PROMPT = `You are a hacker-style terminal embedded in Deekshant Prabin Dahal's cybersecurity portfolio website.
+You respond ONLY as a terminal — short, terse, monospace-style lines. No markdown, no asterisks, no long paragraphs.
+Keep every response under 6 lines. Use terminal prefixes like [INFO], [WARN], [SYS], [OK], [ERR] where appropriate.
+
+Facts about Deekshant:
+- Full name: Deekshant Prabin Dahal
+- Role: SOC Analyst / Cybersecurity Enthusiast / Penetration Tester
+- Education: Bachelor of Information Technology
+- Skills: Wazuh SIEM, Wireshark, Metasploit, Kali Linux, Python scripting, GNN/ML for fraud detection
+- Interests: Threat hunting, SOC workflows, packet analysis, home lab, Vedic astrology (personal)
+- Email: deekshantdahal@gmail.com
+- Location: Kathmandu, Nepal
+- Portfolio sections: About, Skills, Projects, Contact
+
+If someone asks a system/hacking command (nmap, ls, pwd, cat, etc.) respond with realistic but fake terminal output.
+If someone asks about Deekshant, answer factually but keep it short and terminal-style.
+If someone asks something unrelated, say: [ERR] :: Access denied. Unauthorized query.
+Never break character. Never use markdown.`;
+
     const console_ = document.getElementById('secret-console');
     const consoleOutput = document.getElementById('console-output');
     const consoleClose  = document.getElementById('console-close');
     const consoleCmdInput = document.getElementById('console-cmd');
     let consoleOpen = false;
+    let aiThinking  = false;
 
     const bootLogs = [
       { text: '[SYS] :: Initializing portfolio...', cls: 'log-sys' },
       { text: '[NET] :: Scanning for threats... CLEAR', cls: 'log-sys' },
       { text: '[AUTH] :: User: guest | Access: READ-ONLY', cls: 'log-warn' },
-      { text: '[LOG] :: Welcome, stranger. You found the console.', cls: '' },
-      { text: '[TIP] :: Try: whoami | nmap | ls | clear | exit', cls: 'log-warn' },
+      { text: '[AI]  :: Gemini terminal active. Ask me anything.', cls: '' },
+      { text: '[TIP] :: Try: whoami | nmap | help | or just ask anything', cls: 'log-warn' },
     ];
 
-    const commands = {
-      whoami: () => ['guest@deekshant — unauthorized read-only access', '[INFO] You are not Deekshant. Yet.'],
-      nmap: () => ['Starting Nmap scan on portfolio...', 'PORT   STATE  SERVICE', '80/tcp open   http', '443/tcp open  https', '[RESULT] :: No vulnerabilities found. Clean.'],
-      ls: () => ['about.txt  certs.log  mission.exe  skills.db  projects/'],
-      pwd: () => ['/home/deekshant/portfolio'],
-      date: () => [new Date().toString()],
-      help: () => ['Commands: whoami, nmap, ls, pwd, date, clear, exit, help'],
-      clear: () => { consoleOutput.innerHTML = ''; return []; },
-      exit: () => { setTimeout(() => closeConsole(), 300); return ['[SYS] :: Closing channel...'] },
+    // Local instant commands — no API needed
+    const localCmds = {
+      clear: () => { consoleOutput.innerHTML = ''; return null; },
+      exit:  () => { setTimeout(closeConsole, 300); return '[SYS] :: Closing channel...'; },
     };
 
     function appendLog(text, cls = '') {
       const span = document.createElement('span');
-      span.className = `log-line ${cls}`;
+      span.className = 'log-line ' + cls;
       span.textContent = text;
       consoleOutput.appendChild(span);
       consoleOutput.scrollTop = consoleOutput.scrollHeight;
+      return span;
+    }
+
+    async function askGemini(userInput) {
+      const res = await fetch(GEMINI_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          contents: [{ role: 'user', parts: [{ text: userInput }] }],
+          generationConfig: { maxOutputTokens: 200, temperature: 0.7 }
+        })
+      });
+      if (!res.ok) throw new Error('API error ' + res.status);
+      const data = await res.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '[ERR] :: No response.';
     }
 
     function openConsole() {
       consoleOpen = true;
       console_.classList.add('open');
       consoleOutput.innerHTML = '';
-      bootLogs.forEach((l, i) => {
-        setTimeout(() => appendLog(l.text, l.cls), i * 180);
-      });
+      bootLogs.forEach((l, i) => setTimeout(() => appendLog(l.text, l.cls), i * 180));
       setTimeout(() => consoleCmdInput.focus(), bootLogs.length * 180 + 100);
     }
 
@@ -1848,27 +1884,48 @@
     }
 
     document.addEventListener('keydown', e => {
-      if (e.key === '`') {
-        e.preventDefault();
-        consoleOpen ? closeConsole() : openConsole();
-      }
+      if (e.key === '`') { e.preventDefault(); consoleOpen ? closeConsole() : openConsole(); }
     });
-
     consoleClose.addEventListener('click', closeConsole);
 
-    consoleCmdInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        const cmd = consoleCmdInput.value.trim().toLowerCase();
-        if (!cmd) return;
-        appendLog('$ ' + cmd, 'log-sys');
-        const handler = commands[cmd];
-        if (handler) {
-          const result = handler();
-          result.forEach(line => appendLog(line));
-        } else {
-          appendLog(`bash: ${cmd}: command not found`, 'log-err');
-        }
-        consoleCmdInput.value = '';
+    consoleCmdInput.addEventListener('keydown', async e => {
+      if (e.key !== 'Enter') return;
+      const raw = consoleCmdInput.value.trim();
+      if (!raw || aiThinking) return;
+      consoleCmdInput.value = '';
+      appendLog('$ ' + raw, 'log-sys');
+
+      // local commands first
+      const key = raw.toLowerCase();
+      if (localCmds[key] !== undefined) {
+        const out = localCmds[key]();
+        if (out) appendLog(out);
+        return;
+      }
+
+      // everything else → Gemini
+      if (GEMINI_KEY === 'PASTE_YOUR_GEMINI_API_KEY_HERE') {
+        appendLog('[ERR] :: No API key set. Add your Gemini key to the code.', 'log-err');
+        return;
+      }
+
+      aiThinking = true;
+      consoleCmdInput.disabled = true;
+      const thinking = appendLog('[AI]  :: thinking...', 'log-warn');
+
+      try {
+        const reply = await askGemini(raw);
+        consoleOutput.removeChild(thinking);
+        reply.split('\n').forEach(line => {
+          if (line.trim()) appendLog(line);
+        });
+      } catch (err) {
+        consoleOutput.removeChild(thinking);
+        appendLog('[ERR] :: Connection failed. Check API key.', 'log-err');
+      } finally {
+        aiThinking = false;
+        consoleCmdInput.disabled = false;
+        consoleCmdInput.focus();
       }
     });
 
