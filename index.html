@@ -47,6 +47,117 @@
       --dark-base: #000000;
       --dark-card: #0a0a0a;
       --dark-border: #1a1a1a;
+      --text-main: #c9d1d9;
+      --text-muted: #888;
+      --bg-glass: rgba(10,10,10,0.7);
+      --bg-glass-strong: rgba(10,10,10,0.85);
+      --border-glass: rgba(22,126,27,0.18);
+    }
+
+    /* ─── LIGHT MODE ─── */
+    body.light-mode {
+      background: #ffffff;
+      color: #111111;
+    }
+    body.light-mode #navbar {
+      background: rgba(255,255,255,0.92);
+      border-bottom: 1px solid #e0e0e0;
+    }
+    body.light-mode .nav-link        { color: #444; }
+    body.light-mode .nav-link:hover,
+    body.light-mode .nav-link.active  { color: #167e1b; }
+    body.light-mode body              { color: #111111; }
+    body.light-mode .section-title    { color: #111111; }
+    body.light-mode .glass {
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      backdrop-filter: none;
+    }
+    body.light-mode .glass-strong {
+      background: #f5f5f5;
+      border: 1px solid #d5d5d5;
+      backdrop-filter: none;
+    }
+    body.light-mode .bento-card       { background: #f5f5f5; border: 1px solid #e0e0e0; }
+    body.light-mode .bento-card .card-title { color: #111; }
+    body.light-mode .project-card     { background: #f5f5f5; border-color: #d0d0d0; }
+    body.light-mode .project-card h3  { color: #111; }
+    body.light-mode .project-card p   { color: #444; }
+    body.light-mode .terminal-window  { background: #f5f5f5; border-color: #d0d0d0; box-shadow: none; }
+    body.light-mode .terminal-titlebar{ background: #ebebeb; border-bottom-color: #d5d5d5; }
+    body.light-mode .terminal-input   { color: #111; border-bottom-color: #bbb; }
+    body.light-mode .terminal-textarea{ color: #111; border-color: #ccc; }
+    body.light-mode .terminal-prompt  { color: #167e1b; }
+    body.light-mode .social-cmd       { color: #111; }
+    body.light-mode .social-cmd .cmd-url { color: #777; }
+    body.light-mode #secret-console   { background: #f5f5f5; border-color: #d0d0d0; }
+    body.light-mode #console-titlebar { background: #ebebeb; border-bottom-color: #d5d5d5; }
+    body.light-mode #console-output   { color: #555; }
+    body.light-mode #console-cmd      { color: #111; }
+    body.light-mode .scan-line        { display: none; }
+    body.light-mode footer            { border-top-color: #e0e0e0; color: #999; }
+    body.light-mode .hero-content {
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.72) 100%);
+    }
+    body.light-mode .glitch           { color: #111; }
+    body.light-mode .typewriter-text  { color: #167e1b; }
+    body.light-mode p, body.light-mode span:not(.text-neon):not(.section-header):not(.terminal-prompt):not(.cmd-text):not(.tech-pill):not(.status-badge) {
+      color: inherit;
+    }
+    body.light-mode .text-gray-400    { color: #555 !important; }
+    body.light-mode .text-gray-500    { color: #666 !important; }
+    body.light-mode .text-gray-600    { color: #777 !important; }
+    body.light-mode .text-gray-700    { color: #888 !important; }
+    body.light-mode .text-white       { color: #111 !important; }
+    body.light-mode .text-white\/80   { color: #222 !important; }
+    body.light-mode .skill-bar-track  { background: #e0e0e0; }
+    body.light-mode .neon-border      { border-color: #167e1b; box-shadow: none; }
+    body.light-mode #matrix-canvas    { opacity: 0.03; }
+
+    /* ─── SLIDE TOGGLE ─── */
+    #theme-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    #theme-toggle-wrap .toggle-icon {
+      font-size: 0.75rem;
+      line-height: 1;
+      user-select: none;
+    }
+    #theme-toggle {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      border-radius: 11px;
+      background: #1a1a1a;
+      border: 1px solid rgba(22,126,27,0.5);
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s;
+      flex-shrink: 0;
+      padding: 0;
+    }
+    #theme-toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--neon);
+      transition: transform 0.3s ease, background 0.3s;
+      box-shadow: 0 0 6px var(--neon-glow);
+    }
+    body.light-mode #theme-toggle {
+      background: #e8e8e8;
+      border-color: #167e1b;
+    }
+    body.light-mode #theme-toggle::after {
+      transform: translateX(18px);
+      background: #167e1b;
+      box-shadow: 0 0 6px rgba(22,126,27,0.4);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -160,13 +271,12 @@
 
     /* ─── HERO ─── */
     #home { position: relative; width: 100%; height: 100vh; overflow: hidden; }
-    #vanta-bg { position: absolute; inset: 0; z-index: 0; }
     .hero-content {
       position: relative; z-index: 2;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       height: 100%;
-      background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%);
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.78) 100%);
     }
 
     /* ─── TYPEWRITER ─── */
@@ -780,6 +890,13 @@
         <a href="#contact"  class="nav-link">Contact</a>
       </div>
 
+      <!-- Theme Toggle -->
+      <div id="theme-toggle-wrap" title="Toggle light / dark mode">
+        <span class="toggle-icon text-neon">☀</span>
+        <button id="theme-toggle" aria-label="Toggle theme"></button>
+        <span class="toggle-icon text-neon">☾</span>
+      </div>
+
       <!-- Mobile Hamburger -->
       <button id="nav-mobile" class="md:hidden flex flex-col gap-1.5 p-1" aria-label="Menu">
         <span class="hamburger-line"></span>
@@ -802,7 +919,7 @@
 
   <!-- ─── HERO SECTION ─── -->
   <section id="home">
-    <div id="vanta-bg"></div>
+    <canvas id="hero-matrix" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
     <div class="hero-content text-center px-6">
       <div class="mb-3">
         <span class="font-mono text-xs tracking-[0.3em] text-neon/70 uppercase">
@@ -1327,11 +1444,9 @@
           <div class="terminal-body">
             <p class="text-neon/50 text-xs font-mono mb-4">&gt; SECURE CHANNEL ESTABLISHED. COMPOSE MESSAGE.</p>
 
-            <form action="https://formsubmit.co/deekshantdahal@gmail.com" method="POST">
-              <!-- Formsubmit hidden config fields -->
+            <form id="contact-form" method="POST">
               <input type="hidden" name="_captcha" value="false" />
               <input type="hidden" name="_subject" value="New Transmission from Portfolio — Deekshant" />
-              <input type="hidden" name="_next" value="#contact" />
               <input type="text" name="_honey" style="display:none" />
 
               <div class="terminal-line">
@@ -1366,8 +1481,9 @@
                 ></textarea>
               </div>
 
-              <div class="mt-4 flex justify-end">
-                <button type="submit" class="btn-terminal text-sm">[ SEND_TRANSMISSION ]</button>
+              <div class="mt-4 flex items-center justify-between gap-4">
+                <span id="form-status" class="text-xs font-mono hidden"></span>
+                <button type="submit" id="form-submit-btn" class="btn-terminal text-sm ml-auto">[ SEND_TRANSMISSION ]</button>
               </div>
             </form>
           </div>
@@ -1442,55 +1558,55 @@
   </div>
 
   <!-- ─── SCRIPTS ─── -->
-  <!-- Three.js & Vanta.js Globe -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
-
   <script defer>
     // ══════════════════════════════════════════
-    // VANTA GLOBE
+    // CONTACT FORM — AJAX (no redirect)
     // ══════════════════════════════════════════
-    window.addEventListener('DOMContentLoaded', () => {
-      if (window.VANTA && window.THREE) {
-        VANTA.GLOBE({
-          el: "#vanta-bg",
-          THREE: window.THREE,
-          mouseControls: true,
-          touchControls: true,
-          gyroControls: false,
-          minHeight: window.innerHeight,
-          minWidth: window.innerWidth,
-          scale: 1.0,
-          scaleMobile: 1.0,
-          color: 0x167e1b,
-          color2: 0x0d5412,
-          backgroundColor: 0x000000,
-          size: 1.2,
-          points: 10,
-          maxDistance: 22,
-          spacing: 16
-        });
-      }
-    });
+    (function() {
+      const FORM_URL = 'https://formsubmit.co/ajax/deekshantdahal@gmail.com';
+      const form     = document.getElementById('contact-form');
+      const status   = document.getElementById('form-status');
+      const btn      = document.getElementById('form-submit-btn');
 
-    // Retry Vanta after defer loads
-    window.addEventListener('load', () => {
-      if (window.VANTA && window.THREE && !document.querySelector('#vanta-bg canvas')) {
-        VANTA.GLOBE({
-          el: "#vanta-bg",
-          THREE: window.THREE,
-          mouseControls: true,
-          touchControls: true,
-          gyroControls: false,
-          minHeight: window.innerHeight,
-          minWidth: window.innerWidth,
-          color: 0x167e1b,
-          color2: 0x0d5412,
-          backgroundColor: 0x000000,
-          size: 1.2,
+      function handleSubmit(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        btn.disabled = true;
+        btn.textContent = '[ TRANSMITTING... ]';
+        status.style.color = 'var(--neon)';
+        status.textContent = '> sending...';
+        status.classList.remove('hidden');
+
+        fetch(FORM_URL, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        })
+        .then(res => {
+          if (!res.ok) throw new Error();
+          status.style.color = 'var(--neon)';
+          status.textContent = '[OK] :: Transmission received.';
+          form.reset();
+          btn.textContent = '[ SENT ✓ ]';
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = '[ SEND_TRANSMISSION ]';
+            status.textContent = '';
+          }, 4000);
+        })
+        .catch(() => {
+          status.style.color = '#ff4444';
+          status.textContent = '[ERR] :: Transmission failed. Try again.';
+          btn.disabled = false;
+          btn.textContent = '[ SEND_TRANSMISSION ]';
         });
+
+        return false;
       }
-    });
+
+      form.addEventListener('submit', handleSubmit);
+      form.onsubmit = handleSubmit;
+    })();
 
     // ══════════════════════════════════════════
     // TYPEWRITER
@@ -1698,6 +1814,75 @@
         consoleCmdInput.value = '';
       }
     });
+
+    // ══════════════════════════════════════════
+    // THEME TOGGLE
+    // ══════════════════════════════════════════
+    const themeBtn = document.getElementById('theme-toggle');
+    const saved    = localStorage.getItem('theme');
+    if (saved === 'light') { document.body.classList.add('light-mode'); }
+
+    themeBtn.addEventListener('click', () => {
+      const isLight = document.body.classList.toggle('light-mode');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+
+    // ══════════════════════════════════════════
+    // HERO MATRIX RAIN
+    // ══════════════════════════════════════════
+    (function() {
+      const hc     = document.getElementById('hero-matrix');
+      const hx     = hc.getContext('2d');
+      const CHARS  = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホ0123456789ABCDEF<>{}[]|/\\';
+      const FS     = 14;
+      const COLORS = ['#167e1b', '#1fa826', '#0d5412', '#24c42b', '#0f6614'];
+      let cols, drops, colColors;
+
+      function resize() {
+        hc.width  = hc.offsetWidth;
+        hc.height = hc.offsetHeight;
+        cols      = Math.floor(hc.width / FS);
+        drops     = Array.from({ length: cols }, () => Math.random() * -50);
+        colColors = Array.from({ length: cols }, () => COLORS[Math.floor(Math.random() * COLORS.length)]);
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      // Column speed — some fast, some slow for depth effect
+      const speeds = Array.from({ length: cols }, () => 0.3 + Math.random() * 0.7);
+
+      function drawHeroMatrix() {
+        // Semi-transparent fade — controls trail length
+        hx.fillStyle = 'rgba(0,0,0,0.09)';
+        hx.fillRect(0, 0, hc.width, hc.height);
+
+        for (let i = 0; i < drops.length; i++) {
+          const char = CHARS[Math.floor(Math.random() * CHARS.length)];
+          const y    = drops[i] * FS;
+
+          // Bright head
+          hx.fillStyle = 'rgba(127,255,130,0.6)';
+          hx.font      = `bold ${FS}px JetBrains Mono`;
+          hx.fillText(char, i * FS, y);
+
+          // Body in column color
+          hx.globalAlpha = 0.45;
+          hx.fillStyle = colColors[i];
+          hx.font      = `${FS}px JetBrains Mono`;
+          hx.fillText(CHARS[Math.floor(Math.random() * CHARS.length)], i * FS, y + FS);
+          hx.globalAlpha = 1.0;
+
+          if (y > hc.height && Math.random() > 0.97) {
+            drops[i]     = 0;
+            colColors[i] = COLORS[Math.floor(Math.random() * COLORS.length)];
+          }
+          drops[i] += speeds[i] * 0.6;
+        }
+      }
+
+      // Run at ~40fps for medium intensity
+      setInterval(drawHeroMatrix, 25);
+    })();
 
   </script>
 </body>
