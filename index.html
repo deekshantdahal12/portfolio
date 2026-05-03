@@ -1366,8 +1366,9 @@
                 ></textarea>
               </div>
 
-              <div class="mt-4 flex justify-end">
-                <button type="submit" class="btn-terminal text-sm">[ SEND_TRANSMISSION ]</button>
+              <div class="mt-4 flex items-center justify-between gap-4">
+                <span id="form-status" class="text-xs font-mono hidden"></span>
+                <button type="submit" id="form-submit-btn" class="btn-terminal text-sm ml-auto">[ SEND_TRANSMISSION ]</button>
               </div>
             </form>
           </div>
@@ -1491,7 +1492,27 @@
         });
       }
     });
-
+    
+    // ══════════════════════════════════════════
+    // CONTACT FORM — AJAX (no redirect)
+    // ══════════════════════════════════════════
+    const contactForm = document.getElementById('contact-form');
+    const formStatus  = document.getElementById('form-status');
+    const formBtn     = document.getElementById('form-submit-btn');
+      
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault(); // stops the page from navigating away
+      formBtn.disabled = true;
+      formBtn.textContent = '[ TRANSMITTING... ]';
+      ...
+      const res = await fetch(contactForm.action, {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: { 'Accept': 'application/json' }
+      });
+      // updates button + status text based on success or failure
+    });
+    
     // ══════════════════════════════════════════
     // TYPEWRITER
     // ══════════════════════════════════════════
